@@ -28,7 +28,7 @@
         @apply mt-10 p-5 rounded shadow-[0_0px_10px_-2px_rgba(0,0,0,0.4)];
     }
     .answer {
-        @apply relative bg-slate-100 cursor-pointer my-2 select-none;
+        @apply relative bg-slate-100 cursor-pointer my-2 select-none transition duration-200;
     }
     .answer:hover {
         @apply opacity-60;

@@ -14,6 +14,6 @@
         border-top: 1px solid #ddd;
     }
     .question {
-        @apply pl-1 font-bold text-gray-600;
+        @apply pl-1 font-bold text-gray-600 text-lg;
     }
 </style>

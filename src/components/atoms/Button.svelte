@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let variant: "primary" | "submit" = "primary";
+    export let variant: "primary" | "submit" | "delete" = "primary";
     export let text: string = "button";
     export let active: boolean = false;
 </script>
@@ -18,6 +18,14 @@
     }
     .submit:hover {
         @apply bg-[#d91b42];
+    }
+    .delete {
+        @apply mt-3 p-1 w-full text-lg text-[#da5b74] rounded transition ease-in-out duration-300;
+        border: 2px solid #da5b74;
+    }
+    .delete:hover {
+        @apply bg-[#d91b42] text-white;
+        border: 2px solid transparent;
     }
     .active {
         @apply text-[#d91b42];

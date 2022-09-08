@@ -1,19 +1,30 @@
 <script lang="ts">
     import type { PollConfig } from "src/common/models/types/PollConfig";
-    import { createEventDispatcher } from "svelte";
+    import PollStore from "../../stores/PollStore";
+    import Button from "../atoms/Button.svelte";
     import Container from "../atoms/Container.svelte";
     import Label from "../atoms/Label.svelte";
     import Title from "../atoms/Title.svelte";
     import AnswerBlock from "./AnswerBlock.svelte";
 
-    const dispatch = createEventDispatcher();
     export let poll: PollConfig;
     $: totalVotes = poll.votesA + poll.votesB;
     $: percentA = Math.floor((100 / totalVotes) * poll.votesA) || 0;
     $: percentB = Math.floor((100 / totalVotes) * poll.votesB) || 0;
 
     const handleVote = (option: string, id: string) => {
-        dispatch("upvote", { option, id });
+        PollStore.update((currentPolls) => {
+            let copiedPolls = [...currentPolls];
+            let upvotedPoll = copiedPolls.find((poll) => poll.id === id);
+            option === "a" ? upvotedPoll.votesA++ : upvotedPoll.votesB++;
+            return copiedPolls;
+        });
+    };
+
+    const handleDelete = (id: string) => {
+        PollStore.update((currentPolls) => {
+            return currentPolls.filter((poll) => poll.id !== id);
+        });
     };
 </script>
 
@@ -32,5 +43,10 @@
         votes={poll.votesB}
         percent={percentB}
         on:click={() => handleVote("b", poll.id)}
+    />
+    <Button
+        variant="delete"
+        text="Delete"
+        on:click={() => handleDelete(poll.id)}
     />
 </Container>

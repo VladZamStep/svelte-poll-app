@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { fade, slide, scale } from "svelte/transition";
+    import PollStore from "../../stores/PollStore";
     import Button from "../atoms/Button.svelte";
     import { v4 as uuidv4 } from "uuid";
     import { createEventDispatcher } from "svelte";
@@ -44,29 +46,34 @@
                 votesB: 0,
                 id: uuidv4(),
             };
-            dispatch("add-poll", newPoll);
+            PollStore.update((currentPolls) => {
+                return [newPoll, ...currentPolls];
+            });
+            dispatch("add-poll");
         }
     };
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
-    <div class="form-field">
-        <label for="question">Poll Question</label>
-        <input type="text" id="question" bind:value={fields.question} />
-        <div class="error">{errors.question}</div>
-    </div>
-    <div class="form-field">
-        <label for="answerA">Answer A:</label>
-        <input type="text" id="answerA" bind:value={fields.answerA} />
-        <div class="error">{errors.answerA}</div>
-    </div>
-    <div class="form-field">
-        <label for="answerB">Answer B:</label>
-        <input type="text" id="answerB" bind:value={fields.answerB} />
-        <div class="error">{errors.answerB}</div>
-    </div>
-    <Button variant="submit" text="Add Poll" />
-</form>
+<div in:fade>
+    <form on:submit|preventDefault={handleSubmit}>
+        <div class="form-field">
+            <label for="question">Poll Question</label>
+            <input type="text" id="question" bind:value={fields.question} />
+            <div class="error">{errors.question}</div>
+        </div>
+        <div class="form-field">
+            <label for="answerA">Answer A:</label>
+            <input type="text" id="answerA" bind:value={fields.answerA} />
+            <div class="error">{errors.answerA}</div>
+        </div>
+        <div class="form-field">
+            <label for="answerB">Answer B:</label>
+            <input type="text" id="answerB" bind:value={fields.answerB} />
+            <div class="error">{errors.answerB}</div>
+        </div>
+        <Button variant="submit" text="Add Poll" />
+    </form>
+</div>
 
 <style>
     form {
