@@ -6,11 +6,18 @@
     import Label from "../atoms/Label.svelte";
     import Title from "../atoms/Title.svelte";
     import AnswerBlock from "./AnswerBlock.svelte";
+    import { tweened } from "svelte/motion";
 
     export let poll: PollConfig;
     $: totalVotes = poll.votesA + poll.votesB;
     $: percentA = Math.floor((100 / totalVotes) * poll.votesA) || 0;
     $: percentB = Math.floor((100 / totalVotes) * poll.votesB) || 0;
+
+    const tweenedA = tweened(0);
+    const tweenedB = tweened(0);
+    $: tweenedA.set(percentA);
+    $: tweenedB.set(percentB);
+    // $: console.log($tweenedA, $tweenedB);
 
     const handleVote = (option: string, id: string) => {
         PollStore.update((currentPolls) => {
@@ -34,14 +41,14 @@
     <AnswerBlock
         answer={poll.answerA}
         votes={poll.votesA}
-        percent={percentA}
+        percent={$tweenedA}
         on:click={() => handleVote("a", poll.id)}
     />
     <AnswerBlock
         variant="percent-b"
         answer={poll.answerB}
         votes={poll.votesB}
-        percent={percentB}
+        percent={$tweenedB}
         on:click={() => handleVote("b", poll.id)}
     />
     <Button
