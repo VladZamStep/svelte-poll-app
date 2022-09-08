@@ -3,22 +3,13 @@
     import ButtonsContainer from "../components/molecules/ButtonsContainer.svelte";
     import Footer from "../components/molecules/Footer.svelte";
     import Header from "../components/molecules/Header.svelte";
-    import PollList from "../components/molecules/PollList.svelte";
+    import PollList from "../components/organisms/PollList.svelte";
     import type { PollConfig } from "src/common/models/types/PollConfig";
     import Container from "../components/atoms/Container.svelte";
 
     const textArr = ["Current Polls", "Add New Poll"];
     let activeItem = "Current Polls";
-    let polls: PollConfig[] = [
-        {
-            id: "12345",
-            question: "Hello?",
-            answerA: "Yeah",
-            answerB: "Naaah",
-            votesA: 5,
-            votesB: 8,
-        },
-    ];
+    let polls: PollConfig[] = [];
 
     const handleTab = (e: CustomEvent) => {
         activeItem = e.detail;
@@ -49,7 +40,7 @@
 <Container>
     <ButtonsContainer {textArr} {activeItem} on:change-tab={handleTab} />
     {#if activeItem === "Current Polls"}
-        <PollList {polls} on:upvote={addVote} />
+        <PollList on:upvote={addVote} />
     {:else if activeItem === "Add New Poll"}
         <CreatePollForm on:add-poll={addPoll} />
     {/if}

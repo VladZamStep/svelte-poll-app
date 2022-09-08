@@ -1,5 +1,12 @@
 <script lang="ts">
-    export let variant: "main" | "footer" | "card" | "answer" = "main";
+    export let variant:
+        | "header"
+        | "main"
+        | "footer"
+        | "card"
+        | "answer"
+        | "btns"
+        | "polls" = "main";
 </script>
 
 <div class={variant} on:click>
@@ -7,6 +14,10 @@
 </div>
 
 <style>
+    .header {
+        @apply flex gap-10 justify-center items-center bg-gradient-to-b from-slate-200 to-white p-5;
+        border-bottom: 1px solid #e2e8f0;
+    }
     .main {
         @apply max-w-[960px] my-10 mx-auto;
     }
@@ -21,5 +32,11 @@
     }
     .answer:hover {
         @apply opacity-60;
+    }
+    .btns {
+        @apply flex justify-center items-center gap-10;
+    }
+    .polls {
+        @apply grid grid-cols-2 gap-5;
     }
 </style>

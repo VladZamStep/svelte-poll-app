@@ -2,6 +2,7 @@
     import { createEventDispatcher } from "svelte";
 
     import Button from "../atoms/Button.svelte";
+    import Container from "../atoms/Container.svelte";
 
     export let textArr: string[] = [];
     export let activeItem: string;
@@ -9,7 +10,7 @@
     const dispatch = createEventDispatcher();
 </script>
 
-<div class="btns">
+<Container variant="btns">
     {#each textArr as text}
         <Button
             {text}
@@ -17,10 +18,4 @@
             on:click={() => dispatch("change-tab", text)}
         />
     {/each}
-</div>
-
-<style>
-    .btns {
-        @apply flex justify-center items-center gap-5;
-    }
-</style>
+</Container>
