@@ -1,5 +1,9 @@
 <script lang="ts">
     import Button from "../atoms/Button.svelte";
+    import { v4 as uuidv4 } from "uuid";
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
 
     let fields = {
         question: "",
@@ -34,7 +38,13 @@
             errors.answerB = "";
         }
         if (valid) {
-            console.log(fields);
+            const newPoll = {
+                ...fields,
+                votesA: 0,
+                votesB: 0,
+                id: uuidv4(),
+            };
+            dispatch("add-poll", newPoll);
         }
     };
 </script>
