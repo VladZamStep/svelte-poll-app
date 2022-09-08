@@ -5,6 +5,7 @@
     import Header from "../components/molecules/Header.svelte";
     import PollList from "../components/molecules/PollList.svelte";
     import type { PollConfig } from "src/common/models/types/PollConfig";
+    import Container from "../components/atoms/Container.svelte";
 
     const textArr = ["Current Polls", "Add New Poll"];
     let activeItem = "Current Polls";
@@ -29,21 +30,28 @@
         console.log(polls);
         activeItem = "Current Polls";
     };
+
+    const addVote = (e: CustomEvent) => {
+        const { option, id } = e.detail;
+        let copiedPolls = [...polls];
+        let upvotedPoll = copiedPolls.find((poll) => poll.id === id);
+        if (option === "a") {
+            upvotedPoll.votesA++;
+        }
+        if (option === "b") {
+            upvotedPoll.votesB++;
+        }
+        polls = copiedPolls;
+    };
 </script>
 
 <Header />
-<main>
+<Container>
     <ButtonsContainer {textArr} {activeItem} on:change-tab={handleTab} />
     {#if activeItem === "Current Polls"}
-        <PollList {polls} />
+        <PollList {polls} on:upvote={addVote} />
     {:else if activeItem === "Add New Poll"}
         <CreatePollForm on:add-poll={addPoll} />
     {/if}
-</main>
+</Container>
 <Footer />
-
-<style>
-    main {
-        @apply max-w-[960px] my-10 mx-auto;
-    }
-</style>

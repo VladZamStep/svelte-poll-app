@@ -1,42 +1,36 @@
 <script lang="ts">
     import type { PollConfig } from "src/common/models/types/PollConfig";
+    import { createEventDispatcher } from "svelte";
+    import Container from "../atoms/Container.svelte";
+    import Label from "../atoms/Label.svelte";
+    import Title from "../atoms/Title.svelte";
+    import AnswerBlock from "./AnswerBlock.svelte";
 
+    const dispatch = createEventDispatcher();
     export let poll: PollConfig;
     $: totalVotes = poll.votesA + poll.votesB;
+    $: percentA = Math.floor((100 / totalVotes) * poll.votesA) || 0;
+    $: percentB = Math.floor((100 / totalVotes) * poll.votesB) || 0;
+
+    const handleVote = (option: string, id: string) => {
+        dispatch("upvote", { option, id });
+    };
 </script>
 
-<div class="card">
-    <div class="poll">
-        <h3>{poll.question}</h3>
-        <p>Total Votes: {totalVotes}</p>
-        <div class="answer">
-            <div class="percent percent-a" />
-            <span>{poll.answerA} ({poll.votesA})</span>
-        </div>
-        <div class="answer">
-            <div class="percent percent-b" />
-            <span>{poll.answerB} ({poll.votesB})</span>
-        </div>
-    </div>
-</div>
-
-<style>
-    .card {
-        @apply mt-10 p-5 rounded shadow-[0_0px_10px_-2px_rgba(0,0,0,0.4)];
-    }
-    h3 {
-        @apply pl-1 font-bold text-gray-600;
-    }
-    p {
-        @apply pl-1 mt-2 mb-7 text-sm text-gray-400;
-    }
-    .answer {
-        @apply relative bg-slate-100 cursor-pointer my-2;
-    }
-    .answer:hover {
-        @apply opacity-60;
-    }
-    span {
-        @apply inline-block py-2 px-5;
-    }
-</style>
+<Container variant="card">
+    <Title text={poll.question} variant="question" />
+    <Label variant="primary" text="Total Votes: {totalVotes}" />
+    <AnswerBlock
+        answer={poll.answerA}
+        votes={poll.votesA}
+        percent={percentA}
+        on:click={() => handleVote("a", poll.id)}
+    />
+    <AnswerBlock
+        variant="percent-b"
+        answer={poll.answerB}
+        votes={poll.votesB}
+        percent={percentB}
+        on:click={() => handleVote("b", poll.id)}
+    />
+</Container>

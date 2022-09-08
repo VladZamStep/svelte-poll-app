@@ -8,7 +8,7 @@
 
 <div class="polls">
     {#each polls as poll (poll.id)}
-        <Poll {poll} />
+        <Poll {poll} on:upvote />
     {/each}
 </div>
 
